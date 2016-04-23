@@ -21,7 +21,9 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "express-ejs-layouts": "^2.1.0",
+    "fs": "0.0.2",
     "layouts": "^0.11.0",
-    "request": "^2.72.0"
+    "request": "^2.72.0",
+    "xml2json": "^0.9.0"
   }
 }

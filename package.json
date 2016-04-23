@@ -1,0 +1,27 @@
+{
+  "name": "project2-myneighborhood",
+  "version": "0.0.0",
+  "description": "Find a neighborhood just like yours",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshgranadosin/Project2-MyNeighborhood.git"
+  },
+  "author": "Josh Granadosin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshgranadosin/Project2-MyNeighborhood/issues"
+  },
+  "homepage": "https://github.com/joshgranadosin/Project2-MyNeighborhood#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "express-ejs-layouts": "^2.1.0",
+    "layouts": "^0.11.0",
+    "request": "^2.72.0"
+  }
+}

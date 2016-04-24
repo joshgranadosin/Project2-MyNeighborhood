@@ -1,27 +1,28 @@
-//requires
+// Requires
 var express = require("express");
 var request = require("request");
 var bodyParser = require('body-parser');
 var parser = require('xml2json');
 var fs = require('fs');
 var ejsLayouts = require("express-ejs-layouts");
-
+var mongoose = require('mongoose');
 var app = express();
+
+// Middleware
 app.set('view engine', 'ejs');
-
 app.use(ejsLayouts);
-
 app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-var express = require("express");
-var request = require("request");
+
+mongoose.connect('mongodb://localhost/project2-myneighborhood');
+//var Cat = mongoose.model('Cat', { name: String });
 
 // Constants
 var GOOGLEPLACESAPI = "https://maps.googleapis.com/maps/api/place/nearbysearch/";
 var GOOGLEPLACESOUTPUT = "json";
-var RADIUS = 1600;
+var RADIUS = 800;
 
 
 // Dummy Data
@@ -48,11 +49,11 @@ var searchFilters = {
 	},
 	transportation: {
 		enabled: false,
-		types: ["transit_station", "bus_station", "gas_station"]
+		types: ["bus_station", "gas_station"]
 	},
-	family: {
+	public: {
 		enabled: false,
-		types: ["school", "hospital", "police"]
+		types: ["school", "hospital", "police", "library"]
 	},
 	lifestyle: {
 		enabled: true,
@@ -75,7 +76,7 @@ app.get('/Seattle', function(req, res) {
 
 // Throw away, get google's data about 16230
 app.get('/Redmond', function(req, res) {
-	var type = "movie_theater";
+	var type = "bus_station";
 	var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
 		+ "?location=" + startAddress.lati + "," + startAddress.long + "&radius=" + RADIUS
 		+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
@@ -85,6 +86,10 @@ app.get('/Redmond', function(req, res) {
 	});
 });
 
+// Throw away, tally vicinity data for 13657
+app.get('/Kirkland', function(req, res) {
+
+});
 
 
 app.listen(process.env.PORT || 3000);

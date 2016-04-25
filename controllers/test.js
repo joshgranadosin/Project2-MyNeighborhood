@@ -2,7 +2,7 @@
 var express = require("express");
 var request = require("request");
 var bodyParser = require('body-parser');
-var parser = require('xml2json');
+var xml2js = require('xml2js');
 var fs = require('fs');
 var ejsLayouts = require("express-ejs-layouts");
 var mongoose = require('mongoose');
@@ -12,6 +12,7 @@ var router = express.Router();
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+var parser = new xml2js.Parser({explicitRoot:false})
 
 // Dummy Data
 var startAddress = { // used for testing
@@ -61,9 +62,10 @@ var RADIUS = 800;
 // Throw away, read seattle xml
 router.get('/Seattle', function(req, res) {
 	fs.readFile("./seed/xml/Seattle.xml", 'utf8', function(err, xml) {
-		var json = parser.toJson(xml);
-		console.log(json);
-		res.send(json);
+		parser.parseString(xml, function(err, result){
+			console.log(result);
+			res.send(JSON.stringify(result));
+		});
 	});
 });
 

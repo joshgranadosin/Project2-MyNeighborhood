@@ -10,7 +10,7 @@ var citySchema = new mongoose.Schema({
 		// cityURL: String,
 		// latitude: Number,
 		// longitude: Number
-	list: Object //items are inside an array
+	list: Array //items are inside an array
 		// id: Number,
 		// name: String,
 		// zindex: Object,

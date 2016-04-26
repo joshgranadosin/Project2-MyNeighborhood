@@ -87,31 +87,40 @@ var addSeattle = function () {
 
 var addNeighborhoods = function() {
 	City.findOne({'cityInfo.city':'Seattle', 'cityInfo.state':'Washington'}, function(err, city){
+		neighborhoodList = [];
+
 		async.eachSeries(city.list, function(n, nCallback){
 			nLati = n.latitude;
 			nLong = n.longitude;
 
 			hitsObj  = {};
 
-			async.each(allTypes, function(type, hCallback){
+			async.eachSeries(allTypes, function(type, hCallback){
 				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
 				+ "?location=" + nLati + "," + nLong + "&radius=" + RADIUS
 				+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
 
-				setTimeout(console.log(requestURL), 1000);
-				setTimeout(console.log(''), 1000);
+				console.log(requestURL);
+				console.log('');
 
-				//request(requestURL, function(err, response, body) {
-				//	var obj = JSON.parse(body);
-				//	var hits = obj.results.length;
-				//	console.log(type + " has " + hits);
-				//	hitsObj[type] = hits;
-				//});
+				request(requestURL, function(err, response, body) {
+					var obj = JSON.parse(body);
+					var hits = obj.results.length;
+					console.log(type + " has " + hits);
+					hitsObj[type] = hits;
 
-				hCallback();
+					if(obj.error_message){
+						console.log(obj.error_message);
+						return hCallback(new Error("failed request:" + obj.error_message));
+					}
+					else {
+						hCallback();
+					}
+				});
 			}, function(err){
 				if(err){
 					console.log(err);
+					return nCallback(err);
 				}
 				else {
 					newN = new Neighborhood({
@@ -120,17 +129,23 @@ var addNeighborhoods = function() {
 						lati: n.latitude,
 						long: n.longitude,
 						data: hitsObj
-					})
+					});
 					console.log(newN);
+					neighborhoodList.push(newN);
 					nCallback();
 				}
 			});
 		}, function(err){
 			if(err){
 				console.log(err);
+				mongoose.disconnect();
 			}
 			else {
-				console.log("---finished");
+				neighborhoodList.forEach(function(neighborhood){
+					console.log("Saving " + neighborhood.name);
+					neighborhood.save();
+				});
+				console.log("Saved all neighborhoods");
 				mongoose.disconnect();
 			}
 		});

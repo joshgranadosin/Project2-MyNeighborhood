@@ -87,37 +87,50 @@ var addSeattle = function () {
 
 var addNeighborhoods = function() {
 	City.findOne({'cityInfo.city':'Seattle', 'cityInfo.state':'Washington'}, function(err, city){
-		var n = city.list[0];
-		nName = n.name;
-		nID = n.id;
-		nLati = n.latitude;
-		nLong = n.longitude;
+		async.eachSeries(city.list, function(n, nCallback){
+			nLati = n.latitude;
+			nLong = n.longitude;
 
-		hitsObj  = {};
+			hitsObj  = {};
 
-		async.forEach(allTypes, function(type, callback){
-			var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
-			+ "?location=" + nLati + "," + nLong + "&radius=" + RADIUS
-			+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
+			async.each(allTypes, function(type, hCallback){
+				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
+				+ "?location=" + nLati + "," + nLong + "&radius=" + RADIUS
+				+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
 
-			console.log(requestURL), 1000);
-			console.log(''), 1000);
+				setTimeout(console.log(requestURL), 1000);
+				setTimeout(console.log(''), 1000);
 
-			request(requestURL, function(err, response, body) {
-				var obj = JSON.parse(body);
-				var hits = obj.results.length;
-				console.log(type + " has " + hits);
-				hitsObj[type] = hits;
+				//request(requestURL, function(err, response, body) {
+				//	var obj = JSON.parse(body);
+				//	var hits = obj.results.length;
+				//	console.log(type + " has " + hits);
+				//	hitsObj[type] = hits;
+				//});
+
+				hCallback();
+			}, function(err){
+				if(err){
+					console.log(err);
+				}
+				else {
+					newN = new Neighborhood({
+						name: n.name,
+						zillowRegionID: n.id,
+						lati: n.latitude,
+						long: n.longitude,
+						data: hitsObj
+					})
+					console.log(newN);
+					nCallback();
+				}
 			});
-
-			callback();
 		}, function(err){
 			if(err){
 				console.log(err);
 			}
 			else {
-				console.log("End of allTypes array");
-				console.log(hitsObj);
+				console.log("---finished");
 				mongoose.disconnect();
 			}
 		});

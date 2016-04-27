@@ -87,52 +87,69 @@ var addSeattle = function () {
 
 var addNeighborhoods = function() {
 	City.findOne({'cityInfo.city':'Seattle', 'cityInfo.state':'Washington'}, function(err, city){
-		neighborhoodList = [];
 
 		async.eachSeries(city.list, function(n, nCallback){
-			nLati = n.latitude;
-			nLong = n.longitude;
-
-			hitsObj  = {};
-
-			async.eachSeries(allTypes, function(type, hCallback){
-				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
-				+ "?location=" + nLati + "," + nLong + "&radius=" + RADIUS
-				+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
-
-				console.log(requestURL);
-				console.log('');
-
-				request(requestURL, function(err, response, body) {
-					var obj = JSON.parse(body);
-					var hits = obj.results.length;
-					console.log(type + " has " + hits);
-					hitsObj[type] = hits;
-
-					if(obj.error_message){
-						console.log(obj.error_message);
-						return hCallback(new Error("failed request:" + obj.error_message));
-					}
-					else {
-						hCallback();
-					}
-				});
-			}, function(err){
-				if(err){
-					console.log(err);
-					return nCallback(err);
+			Neighborhood.count({zillowRegionID: n.id}, function(err, count){
+				if(count > 0){
+					console.log("Neighborhood " + n.name + " already in the database");
+					console.log('');
+					nCallback();
 				}
 				else {
-					newN = new Neighborhood({
-						name: n.name,
-						zillowRegionID: n.id,
-						lati: n.latitude,
-						long: n.longitude,
-						data: hitsObj
+					nLati = n.latitude;
+					nLong = n.longitude;
+
+					hitsObj  = {};
+
+					async.eachSeries(allTypes, function(type, hCallback){
+						var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
+						+ "?location=" + nLati + "," + nLong + "&radius=" + RADIUS
+						+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
+
+						console.log(requestURL);
+						console.log('');
+
+						request(requestURL, function(err, response, body) {
+							var obj = JSON.parse(body);
+							var hits = obj.results.length;
+							console.log(type + " has " + hits);
+							hitsObj[type] = hits;
+
+							if(obj.error_message){
+								console.log(obj.error_message);
+								return hCallback(new Error("failed request: " + obj.error_message));
+							}
+							else {
+								hCallback();
+							}
+						});
+					}, function(err){
+						if(err){
+							console.log(err);
+							return nCallback(err);
+						}
+						else {
+							newN = new Neighborhood({
+								name: n.name,
+								zillowRegionID: n.id,
+								lati: n.latitude,
+								long: n.longitude,
+								data: hitsObj
+							});
+							newN.save(function(error, doc){
+								if(err){
+									console.log(err);
+									return nCallback(new Error("failed save: " + error));
+								}
+								else {
+									console.log("Success. Please check the database.");
+									console.log('');
+								}
+							}).then(function(doc){
+								nCallback();
+							});
+						}
 					});
-					console.log(newN);
-					neighborhoodList.push(newN);
-					nCallback();
 				}
 			});
 		}, function(err){
@@ -141,10 +158,6 @@ var addNeighborhoods = function() {
 				mongoose.disconnect();
 			}
 			else {
-				neighborhoodList.forEach(function(neighborhood){
-					console.log("Saving " + neighborhood.name);
-					neighborhood.save();
-				});
 				console.log("Saved all neighborhoods");
 				mongoose.disconnect();
 			}

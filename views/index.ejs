@@ -1,0 +1,28 @@
+<div class="navbar">
+	<div class="nav">START OVER</div>
+	<div class="nav">OUR PICKS</div>
+	<div class="nav">FAVORITES</div>
+	<div class="nav">LOG IN</div>
+</div>
+
+<div class="form_container">
+	<form action="/results" method="POST" role="form">
+		<legend>Where you're from.</legend>
+
+		<input type="text" name="streetAddress" placeholder="Street Address">
+		<input type="text" name="oldCity" placeholder="City">
+		<%- include statelist.ejs %>
+		<input type="text" name="oldZip" placeholder="Zip">
+	
+		<legend>Where you're going.</legend>
+	
+		<select name="newCity">
+			<option value="Seattle">Seattle</option>
+		<select>
+		<select name="newState">
+			<option value="Washington">WA</option>
+		<select>
+
+		<button type="submit">Submit</button>
+	</form>
+</div>

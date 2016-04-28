@@ -32,12 +32,18 @@ router.get('/signin', function(req, res) {
 	}
 });
 
-// GET signup form - Need to fix ejs - route tested.
+// GET signup form - signup.ejs - Need to fix ejs - route tested.
 router.get('/signup', function(req, res) {
-	res.render('signup');
+	if(req.session.searchResults) {
+		var recoverResults = JSON.parse(req.session.searchResults);
+		res.render('signup', {formfill: true, results: recoverResults});
+	}
+	else {
+		res.render('signup', {formfill: false, results: null});
+	}
 });
 
-// GET favorite - Not done
+// GET favorite - favorites.ejs - Not done
 router.get('/favorites', function(req, res) {
 	if(req.session.user) {
 		res.send('favorites');
@@ -47,18 +53,18 @@ router.get('/favorites', function(req, res) {
 	}
 });
 
-// GET favorite (show) - Not done, might just redirect
+// GET favorite (show) - show.ejs - Not done, might just redirect
 router.get('/favorite/:email/:neighborhoodID', function(req, res) {
+	res.send('favorites');
+});
 
-})
-
-// GET signout - tested
+// GET signout - index.ejs - tested
 router.get('/signout', function(req, res) {
 	req.session.user = undefined;
 	res.redirect('/');
 });
 
-// POST existing user signin - Need to fix ejs. - route tested, 
+// POST existing user signin - results.ejs - Need to fix ejs. - route tested, 
 router.post('/signin', function(req, res) {
 	User.findOne({email: req.body.email}, function(err, user){
 		console.log(user);
@@ -81,19 +87,12 @@ router.post('/signin', function(req, res) {
 	});
 });
 
-// POST new user signup - Need to fix ejs. - route tested
+// POST new user signup - results.ejs - Need to fix ejs. - route tested
 router.post('/signup', function(req, res) {
 	var newUser = new User({
 		email: req.body.email,
 		password: req.body.password,
-
-		//throw away code
-		address: {
-			street: "11209 NE 141ST PL",
-			city: "Kirkland",
-			state: "WA",
-			zip: "98034"
-		}
+		address: req.body.address
 	});
 	console.log(newUser);
 
@@ -111,7 +110,7 @@ router.post('/signup', function(req, res) {
 			console.log(doc);
 			res.send(doc);
 		}
-	})
+	});
 });
 
 // POST new favorite route - Done, not tested
@@ -127,9 +126,9 @@ router.post('/favorites/:email/:neighborhoodID', function(req, res) {
 				}
 			}
 
-			if(neighborhoodToSave){
+			if(neighborhoodToSave) {
 				user.favorite.push(neighborhoodToSave);
-				user.save(function(err, doc){
+				user.save(function(err, doc) {
 					if(err) {
 						console.log(err);
 						res.send("Something went wrong");
@@ -140,7 +139,7 @@ router.post('/favorites/:email/:neighborhoodID', function(req, res) {
 					}
 				});
 			}
-			else{
+			else {
 				console.log("Couldn't find that neighborhood among results");
 				res.send("Couldn't find that neighborhood among results");
 			}
@@ -154,24 +153,35 @@ router.post('/favorites/:email/:neighborhoodID', function(req, res) {
 // DELETE favorite route - Done, not tested
 router.delete('/favorites/:email/:neighborhoodID', function(req, res) {
 	if(req.session.user === req.params.email) {
-		User.findOne({email: req.session}, function(err, user) {
+		User.findOne({email: req.session.user}, function(err, user) {
 			var neighborhoodToRemove = undefined;
 
 			for(var i = 0; i < user.favorite.length; i++) {
-				if(req.params.neighborhoodID === user.favorite[i].neighborhood.zillowRegionID){
+				if(req.params.neighborhoodID === user.favorite[i].neighborhood.zillowRegionID) {
 					neighborhoodToRemove = user.favorite[i].pop();
 				}
 			}
 
 			if(neighborhoodToRemove) {
-			console.log("Deleted: " + neighborhoodToRemove);
-			res.sendStatus(200);
+				user.save(function(err, doc) {
+					if(err){
+						console.log(err);
+						res.send("Something went wrong");
+					}
+					else {
+						console.log("deleted: " + doc);
+						res.sendStatus(200);
+					}
+				});
 			}
 			else {
 				console.log("Nothing deleted");
 				res.send("Nothing deleted");
 			}
 		});
+	}
+	else {
+		res.send('You must be logged in as ' + req.params.email + ' to complete this action.');
 	}
 });
 

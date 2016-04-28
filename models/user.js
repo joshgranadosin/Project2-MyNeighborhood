@@ -30,10 +30,8 @@ var userSchema = new mongoose.Schema({
 		required: [true, "Your password must be 8-20 characters."]
 	},
 	address: {
-		street: {type: String, required: true},
-		city: {type: String, required: true},
-		state: {type: String, required: true},
-		zip: {type: String, required: true}
+		type: String,
+		required: true
 	},
 	lati: Number,
 	long: Number,
@@ -121,6 +119,7 @@ userSchema.pre('save', function(next){
 							return next(err);
 						}
 			            self.password = hash;
+			            self.email = self.email.toLowerCase();
 			            next();
 					});
 				}

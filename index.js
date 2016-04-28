@@ -65,7 +65,7 @@ app.get('/', function(req, res) {
 	res.render('index');
 });
 
-// GET results - must fix ejs, route tested
+// GET results - results.ejs must fix ejs, route tested
 app.get('/results', function(req, res) {
 	console.log("get/results");
 	if(req.session.searchResults) {
@@ -78,7 +78,7 @@ app.get('/results', function(req, res) {
 	}
 });
 
-// GET saved neighborhood - no ejs, not tested
+// GET saved neighborhood - show.ejs - no ejs, not tested
 app.get('/results/:email/:neighborhoodID', function(req, res) {
 	User.count({email: req.params.email}, function(err, count){
 		if (count === 0){
@@ -97,32 +97,24 @@ app.get('/results/:email/:neighborhoodID', function(req, res) {
 	});
 });
 
-// POST Results after Main Page - need to fix ejs, route tested
+// POST Results after Main Page - results.ejs need to fix ejs, route tested
 app.post('/results', function(req, res){
 	console.log("post/results");
-	var origin = {
-		street: req.body.streetAddress,
-		city: req.body.oldCity,
-		state: req.body.oldState,
-		zip: req.body.oldZip
-	}
-	var destinationCity = req.body.newCity;
-	var destinationState = req.body.newState;
+	var origin = req.body.address;
+	var destination = req.body.destination;
 
 	var hitsObj = {};
 
 	var geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-	var bigAddr = origin.street.replace(/ /g,'+') + '+' + origin.city + '+' + origin.state + '+' + origin.zip;
-	console.log("Geocoding " + bigAddr);
-	request(geocodeURL + bigAddr + "&key=" + process.env.GOOGLE_PLACES_API_KEY, function(err, geocodeResponse, body){
+	console.log("Geocoding " + origin);
+	request(geocodeURL + origin.replace(' ', '+') + "&key=" + process.env.GOOGLE_PLACES_API_KEY, function(err, geocodeResponse, body){
 		if(!err && geocodeResponse.statusCode === 200){
 			var data = JSON.parse(body);
-			origin['lati'] = data.results[0].geometry.location.lat;
-			origin['long'] = data.results[0].geometry.location.lng;
+			var lati = data.results[0].geometry.location.lat;
+			var long = data.results[0].geometry.location.lng;
 
 			async.eachSeries(allTypes, function(type, hCallback){
-				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
-				+ "?location=" + origin.lati + "," + origin.long + "&radius=" + RADIUS
+				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT + "?location=" + lati + "," + long + "&radius=" + RADIUS
 				+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
 
 				console.log(requestURL);
@@ -148,8 +140,6 @@ app.post('/results', function(req, res){
 					res.send(err);
 				}
 				else {
-					origin['data'] = hitsObj;
-					console.log(origin);
 					var superResults = [];
 
 					City.findOne({/*'cityinfo.city': destinationCity, 'cityinfo.state': 'Washington'*/}, function(err, city){
@@ -159,23 +149,20 @@ app.post('/results', function(req, res){
 							Neighborhood.findOne({zillowRegionID: neighborhoodListed.id}).then(function(neighborhood){
 								var score = 0;
 								var tally = 0;
-								for(var key in origin.data){
-									if(origin.data[key] === 0 && neighborhood.data[key] === 0){
+								for(var key in hitsObj){
+									if(hitsObj[key] === 0 && neighborhood.data[key] === 0){
 										score += 1;
 									}
-									else if(origin.data[key] === 0 && neighborhood.data[key] != 0){
+									else if(hitsObj[key] === 0 && neighborhood.data[key] != 0){
 										score = score;
 									}
-									else if(origin.data[key] > neighborhood.data[key]){
-										score += 1 - Math.abs((neighborhood.data[key] - origin.data[key]) / origin.data[key]);
-										console.log(neighborhood.data[key] + " " + origin.data[key])
+									else if(hitsObj[key] != 0 && neighborhood.data[key] === 0){
+										score = score;
 									}
-									else if(origin.data[key] <= neighborhood.data[key]){
-										score += 1 - Math.abs((origin.data[key] - neighborhood.data[key]) / neighborhood.data[key]);
-										console.log(neighborhood.data[key] + " " + origin.data[key])										
-									}
-									else{
-										console.log("-------");
+									else {
+										var difference = Math.abs(hitsObj[key] - neighborhood.data[key]);
+										var average = (hitsObj[key] + neighborhood.data[key]) / 2;
+										score += 1 - (difference / average);
 									}
 									tally++;
 								}
@@ -196,8 +183,8 @@ app.post('/results', function(req, res){
     							truncatedResults.push(superResults.pop());
     						}
 
-    						req.session.searchResults = JSON.stringify({origin: origin, truncatedResults: truncatedResults});
-							res.send({origin:origin, results:truncatedResults});
+    						req.session.searchResults = JSON.stringify({origin: origin, hits:hitsObj, truncatedResults: truncatedResults});
+							res.send({origin:origin, hits:hitsObj, results:truncatedResults});
 						});
 					});
 				}

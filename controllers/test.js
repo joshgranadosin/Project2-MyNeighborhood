@@ -14,6 +14,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 var parser = new xml2js.Parser({explicitRoot:false})
 
+// models
+var City = require('./../models/city.js');
+var Neighborhood = require('./../models/neighborhood.js');
+var User = require('./../models/user.js');
+
 // Dummy Data
 var startAddress = { // used for testing
 	address: '16230 NE 99TH ST',
@@ -27,31 +32,6 @@ var startAddress = { // used for testing
 var endCity = { // used for testing
 	city: 'Seattle',
 	state: 'WA'
-}
-
-
-// Default search filters
-var searchFilters = {
-	convenience: {
-		enabled: false,
-		types: ["bank", "grocery_or_supermarket", "post_office", "meal_delivery", "convenience_store"]
-	},
-	transportation: {
-		enabled: false,
-		types: ["bus_station", "gas_station"]
-	},
-	public: {
-		enabled: false,
-		types: ["school", "hospital", "police", "library"]
-	},
-	lifestyle: {
-		enabled: true,
-		types: ["bar", "cafe", "church", "pet_store", "gym"]
-	},
-	recreation: {
-		enabled: false,
-		types: ["movie_theater", "park"]
-	}
 }
 
 // Constants
@@ -89,6 +69,12 @@ router.get('/Kirkland', function(req, res) {
 		+ "?location=" + startAddress.lati + "," + startAddress.long + "&radius=" + RADIUS
 		+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
 	
+});
+
+router.get('/user/:userEmail', function(req, res) {
+	User.findOne({email: req.params.userEmail}, function(err, user){
+		res.send(user);
+	});
 });
 
 module.exports = router;

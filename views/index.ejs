@@ -1,4 +1,62 @@
-<div class="navbar">
+<div class="header">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+			<div class="logo"></div>
+			<div class="auth">
+				<a>SIGN UP </a> | <a> LOG IN</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<h1 class="h1-white">FIND HOME IN ANOTHER CITY</h1>
+			<h3 class="h3-white">Find your neighborhood's closest match in a new city</h3>
+		</div>		
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+			<form class="input-container">
+				<input class="field-over-media" name="address" type="text" placeholder="Address, City, State ZIP">
+				<input class="field-over-media" name="destination" type="text" value="Seattle, WA" readonly>
+				<button class="btn btn-primary submit" type="submit">FIND MY NEIGHBORHOOD</button>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="middle">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+			<image class="thumb-middle" src="/img/NeighborhoodImage.png">
+			<h2>Move to a neighborhood similar to yours.</h2>
+			<p>Letting go is hard, especially when leaving a place that you or your family have grown to love.  Lorem Bacon ipsum dolor amet boudin brisket pork chop, pork kevin cow strip steak bresaola pastrami short ribs beef ribs chicken bacom.</p>
+			<button class="btn btn-info">HOW IT WORKS</button>
+		</div>
+	</div>
+</div>
+<div class="middle gray">
+	<div class="row text-centered">
+		<h2>A new neighborhood</h2>
+		<p>These people found love a second time around.</p>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+			<div class="image-container">
+				<image class="thumb" src="/img/Rectangle1.png">
+				<image class="thumb" src="/img/Rectangle2.png">
+				<image class="thumb" src="/img/Rectangle3.png">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="footer">
+	<a href=""> Technologies Used </a> |
+	<a href=""> Approach Taken </a> |
+	<a href=""> Installation Instructions </a> |
+	<a href=""> Unsolved Problems </a> |
+	<a href=""> Wireframes </a>
+</div>
+
+<!-- <div class="navbar">
 	<div class="nav">START OVER</div>
 	<div class="nav">OUR PICKS</div>
 	<div class="nav">FAVORITES</div>
@@ -9,10 +67,7 @@
 	<form action="/results" method="POST" role="form">
 		<legend>Where you're from.</legend>
 
-		<input type="text" name="streetAddress" placeholder="Street Address">
-		<input type="text" name="oldCity" placeholder="City">
-		<%- include statelist.ejs %>
-		<input type="text" name="oldZip" placeholder="Zip">
+		<input type="text" name="address" placeholder="Street Address, City, State, Zip">
 	
 		<legend>Where you're going.</legend>
 	
@@ -25,4 +80,5 @@
 
 		<button type="submit">Submit</button>
 	</form>
-</div>
+</div> -->
+

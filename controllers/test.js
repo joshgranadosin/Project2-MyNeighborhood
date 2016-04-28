@@ -77,4 +77,22 @@ router.get('/user/:userEmail', function(req, res) {
 	});
 });
 
+router.get('/show/:zillowRegionID', function(req, res) {
+	Neighborhood.count({zillowRegionID: req.params.zillowRegionID}, function(err, count){
+		if(count > 0){
+			Neighborhood.findOne({zillowRegionID: req.params.zillowRegionID}, function(err, neighborhood){
+				res.send(neighborhood);
+			});
+		}
+	});
+});
+
+router.get('/show', function(req, res) {
+	res.render('show');
+});
+
+router.get('/results', function(req, res) {
+	res.render('results');
+});
+
 module.exports = router;

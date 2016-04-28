@@ -16,7 +16,19 @@ h2 {
 	font-family: 'Lato', sans-serif;
 }
 
+li {
+	min-width: 150px;
+}
+
 .header{
+	height: 90px;
+	width: 100%;
+
+	background-image: url("/img/Headerimage.png");
+	background-position: center;
+}
+
+.header-big{
 	height: 240px;
 	width: 100%;
 
@@ -117,6 +129,28 @@ h2 {
 	width: 273px;
 }
 
+.origin-well{
+	height: 200px;
+	margin-bottom: 1px solid black;
+}
+
+.result-well{
+	height: 200px;
+	margin-bottom: 1px solid black;
+}
+
+.area-pics{
+	display: inline-block;
+	margin: 11px;
+	float: left;
+}
+
+.stats{
+	font-size: 12px;
+	line-height: 14px;
+	list-style: none;
+}
+
 .footer{
 	color: white;
 	text-align: center;
@@ -126,4 +160,9 @@ h2 {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
+}
+
+.data-column{
+	display: inline-block;
+	width: auto;
 }

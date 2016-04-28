@@ -89,6 +89,7 @@ app.get('/results/:email/:neighborhoodID', function(req, res) {
 				for(var i = 0; i < user.favorite.length; i++){
 					if(user.favorite[i].zillowRegionID === req.params.neighborhoodID){
 						res.send(user.favorite);
+						//res.render({show:user.favorite});
 					}
 				}
 				res.send("There is no such page.");
@@ -182,9 +183,19 @@ app.post('/results', function(req, res){
     						for(var i = 0; i < 10; i++){
     							truncatedResults.push(superResults.pop());
     						}
+    						var home = {
+    							origin: origin,
+    							lati: lati,
+    							long: long
+    						}
 
-    						req.session.searchResults = JSON.stringify({origin: origin, hits:hitsObj, truncatedResults: truncatedResults});
-							res.send({origin:origin, hits:hitsObj, results:truncatedResults});
+    						req.session.searchResults = JSON.stringify({home:home, hits:hitsObj, truncatedResults: truncatedResults});
+							//res.send({home:home, hits:hitsObj, results:truncatedResults});
+							res.render('results', {
+								home: home,
+								hits: hitsObj,
+								results:truncatedResults
+							});
 						});
 					});
 				}

@@ -1,1 +1,56 @@
-show.ejs
+<div class="header">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+			<div class="logo"></div>
+			<div class="auth">
+				<a>SIGN UP </a> | <a> LOG IN</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div>
+	<div class="row well">
+		<div class="col-xs-12 col-sm-12 col-md-11 col-lg-10 col-md-offset-1 col-lg-offset-2">
+			<div class="area-pics" id="origin"></div>
+			<div class="container data-column">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<h2><%= show.name %></h2>
+					</div>
+				</div>
+
+				<div class="row">
+						<% allTypes.forEach(function(key, index){ %>
+						<% if(hits[key] === 0){allTypes.splice(index, 1); index--;} else { %>
+							<% if ((index) % 10 === 0) { %>
+								</div><div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+							<% } %>
+							<li class="stats"><%= key.replace(/_/g, ' ') %>: <%= show.data[key] %></li>
+						<%}});%>
+				</div>
+			</div>
+		</div>	
+	</div>
+</div>
+
+<script>
+	var lati = <%= show.lati %>; //arg
+	var long = <%= show.long %>
+	var rectMod = 0.005;
+
+	var myRequest = {
+	  'rect': {'sw': {'lat': (lati - rectMod), 'lng': (long * 1 - rectMod)},
+	  'ne': {'lat': (lati + rectMod), 'lng': (long * 1 + rectMod)}}
+	};
+
+	var myOptions = {
+	  'width': 400,
+	  'height': 216,
+	  'croppedPhotos': false
+	};
+
+	var widget = new panoramio.PhotoWidget('origin', myRequest, myOptions);
+	widget.setPosition(0);
+</script>
+

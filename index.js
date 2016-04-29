@@ -44,7 +44,7 @@ app.use(function(req, res, next){
 	}
 });
 
-mongoose.connect('mongodb://localhost/project2-myneighborhood');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/project2-myneighborhood');
 
 // Constants
 var GOOGLEPLACESAPI = "https://maps.googleapis.com/maps/api/place/nearbysearch/";

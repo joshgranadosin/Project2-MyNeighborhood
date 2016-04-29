@@ -49,6 +49,14 @@ router.get('/Seattle', function(req, res) {
 	});
 });
 
+router.get('/city', function(req,res) {
+	City.findOne({}, function(err, result){
+		console.log(result.list);
+		res.send(result.list);
+	})
+})
+
+
 // Throw away, get google's data about 16230
 router.get('/Redmond', function(req, res) {
 	var type = "bus_station";

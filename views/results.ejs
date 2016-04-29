@@ -28,7 +28,7 @@
 						<% allTypes.forEach(function(key, index){ %>
 						<% if(hits[key] === 0){allTypes.splice(index, 1); index--;} else { %>
 							<% if ((index) % 10 === 0) { %>
-								</div><div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+								</div><div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 data-column-small">
 							<% } %>
 							<li class="stats"><%= key.replace(/_/g, ' ') %>: <%= hits[key] %></li>
 						<%}});%>
@@ -66,7 +66,7 @@
 				<div class="container data-column">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<a href="/test/show/<%= result.neighborhood.zillowRegionID %>">
+							<a href="/results/<%=  %>/<%= result.neighborhood.zillowRegionID %>">
 								<h2><%= result.neighborhood.name %></h2>
 							</a>
 						</div>
@@ -75,7 +75,7 @@
 					<div class="row">
 						<% allTypes.forEach(function(key, index){ %>
 							<% if (index % 6 === 0) { %>
-								</div><div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+								</div><div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 data-column-small">
 								<% }; if (index > 10) {} else {%>
 								<li class="stats"><%= key.replace(/_/g, ' ') %>: <%= result.neighborhood.data[key] %></li>
 							<% } %>

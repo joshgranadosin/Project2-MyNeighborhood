@@ -24,7 +24,7 @@
 						<% allTypes.forEach(function(key, index){ %>
 						<% if(hits[key] === 0){allTypes.splice(index, 1); index--;} else { %>
 							<% if ((index) % 10 === 0) { %>
-								</div><div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+								</div><div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 data-column-small">
 							<% } %>
 							<li class="stats"><%= key.replace(/_/g, ' ') %>: <%= show.data[key] %></li>
 						<%}});%>

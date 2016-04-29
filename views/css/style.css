@@ -18,6 +18,7 @@ h2 {
 
 li {
 	min-width: 150px;
+	text-overflow: none;
 }
 
 .header{
@@ -164,5 +165,9 @@ li {
 
 .data-column{
 	display: inline-block;
-	width: auto;
+	width: 270px;
+}
+
+.data-column-small{
+	margin-top: 11px;
 }

@@ -44,7 +44,7 @@ router.get('/Seattle', function(req, res) {
 	fs.readFile("./seed/xml/Seattle.xml", 'utf8', function(err, xml) {
 		parser.parseString(xml, function(err, result){
 			console.log(result);
-			res.send(JSON.stringify(result));
+			res.send(result);
 		});
 	});
 });

@@ -1,0 +1,75 @@
+<div class="header">
+	<% include ./partials/header %>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+			<div class="well">
+				<a name="t"><h2>Technologies used:</h2></a>
+
+				<h4>Server:</h4>
+				<ul><li>Node.js Express running on Heroku</li></ul>
+				<h4>Database:</h4>
+				<ul><li>MongoDB on Heroku's mLabs connected via Mongoose</li></ul>
+				<h4>APIs:</h4>
+				<ul><li>Zillow (planned for get Region Children)</li>
+				<li>Google Places</li>
+				<li>Panoramia</li></ul>
+				<h4>NPM Modules:</h4>
+				<ul><li>async</li>
+				<li>bcrypt</li>
+				<li>body-parser</li>
+				<li>ejs</li>
+				<li>express</li>
+				<li>express-ejs-layouts</li>
+				<li>express-session</li>
+				<li>fs</li>
+				<li>layouts</li>
+				<li>mongoose</li>
+				<li>request</li>
+				<li>validator</li>
+				<li>xml2js</li></ul>
+			</div>
+			<div class="well">
+				<a name="a"><h2>Approach Taken:</h2></a>
+				<p>I started with the user story; Jason Persona is moving to Seattle but want to go to a neighborhood similar to where he's from.</p>
+
+				<p>Then, I searched for APIs for information needed. I spent a couple of days just to filter and store data into the database. I created a test controller to view raw data and see how I'm passing it around.</p>
+
+				<p>With that, I had a basis for creating my routes and web layouts. I tried using bootstrap and wireframes to make it easier, but I ran out of time.</p>
+
+				<p>I deployed to Heroku and mLabs after.</p>
+			</div>
+			<div class="well">
+				<a name="i"><h2>Installation instructions:</h2></a>
+				<ul><li>Fork my code using git/github.</li>
+				<li>Install the dependencies using npm install. The package.json file should know which modules to install.</li>
+				<li>Get API keys for Google Map APIs. You may need to input a credit card and enable billing because you can run out of API calls during database seeding and development.</li>
+				<li>Create a mongo database. My project name is Project2-myneighborhood, but you can have any name, just edit the mongoose.connect code. Seattle.js has functions that can seed your databse with an included file Seattle.xml.</li>
+				<li>If you decide to deploy to heroku, you'll need to have heroku create an mLab account and seed the database.	The easiest way is to export your database as a .json file and import it through mLab's tools.</li></ul>
+			</div>
+			<div class="well">
+				<a name="u"><h2>Unsolved Problems:</h2></a>
+				<p>The data is obtained through A LOT of api calls. To prevent this, you can seed the database each time a query is run or limit the query to what is seeded in the database. I ended up with the latter because of loading speed issues. The most elegant solution would be to find other sources for the data.</p>
+
+				<p>I did not have enough time to fully flesh out the site. The show route is not working. I don't have a way to grab descriptions of each location. Favorites is not working. Logging in doesn't change the user experience. Sharing is not working.</p>
+
+				<p>Pictures are obtained via Panoramia. It will not work when running as an https. I may need to force http or get pictures from else where.</p>
+			</div>
+			<div class="well">
+				<a name="w"><h2>Wireframes:</h2></a>
+			</div>
+			<div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+				<% for (var i = 1; i <= 8; i++) { %>
+					<div class="well">
+						<img class="wireframe" src="./wireframes/<%= i %>.png">
+					</div>
+				<% } %>
+				<div class="buffer">
+				</div>
+			<div>
+			</div>
+		</div>
+	</div>
+</div>

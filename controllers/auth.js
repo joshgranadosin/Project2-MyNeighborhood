@@ -77,7 +77,7 @@ router.post('/signin', function(req, res) {
 	 		else if(result === true) {
 	 			console.log(result);
 	 			req.session.user = user.email;
-				res.send("Password matched!");
+				res.redirect('/');
 			}
 			else {
 				console.log(result);
@@ -107,8 +107,8 @@ router.post('/signup', function(req, res) {
 			}
 		}
 		else {
-			console.log(doc);
-			res.send(doc);
+			req.session.user = newUser.email;
+			res.redirect('/results');
 		}
 	});
 });

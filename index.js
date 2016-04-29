@@ -30,11 +30,14 @@ app.use(session({
 
 app.use(function(req, res, next){
 	console.log("accessing middleware");
-	console.log(req.session.user);
+	console.log(req.session);
 	if(req.session.user) {
-		User.find({email: req.session.user}, function(user){
+		User.find({email: req.session.user}, function(err, user){
+			console.log('user', user);
 			req.currentUser = user;
+			console.log('req.currentUser', req.currentUser);
 			res.locals.currentUser = user;
+			console.log('res.locals.currentUser', res.locals.currentUser);
 			next();
 		});
 	}
@@ -212,6 +215,10 @@ app.post('/results', function(req, res){
 
 app.get('/error', function(req, res) {
 	res.render('error');
+});
+
+app.get('/readme', function(req, res) {
+	res.render('readme');
 });
 
 app.listen(process.env.PORT || 3000);

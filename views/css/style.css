@@ -45,7 +45,7 @@ li {
 	margin-left: 83px;
 	margin-top: 15px;
 
-	background-image: url("/img/logo.png");
+	background-image: url("../img/logo.png");
 	background-size: 100% 130%;
 }
 
@@ -54,7 +54,7 @@ li {
 	float: right;
 	margin-right: 100px;
 	margin-top: 36px;
-	width: 150px;
+	width: 400px;
 
 	color: white;
 	font-family: 'Lato', sans-serif;
@@ -171,3 +171,25 @@ li {
 .data-column-small{
 	margin-top: 11px;
 }
+
+.signup-field{
+	height: 33.5px;
+	background-color: rgba(255, 255, 255, 0.84);
+	border: 1px solid rgba(151, 151, 151, 1);
+	border-radius: 4px;
+	margin: 4px;
+	display: block;
+	width: 100%;
+}
+
+.buffer{
+	height: 200px;
+}
+
+.wireframe {
+    width: 100%; /* or any custom size */
+    height: 100%; 
+    object-fit: contain;
+}
+
+

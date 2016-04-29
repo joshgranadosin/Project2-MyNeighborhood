@@ -1,22 +1,22 @@
 <div class="header">
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
-			<div class="logo"></div>
-			<div class="auth">
-				<a>SIGN UP </a> | 
-				<a data-toggle="modal" href='#modal-id'> LOG IN</a>
-			</div>
-		</div>
-	</div>
+	<% include ./partials/header %>
 </div>
 
-<div class="form_container">
-	<form action="/auth/signup" method="POST" role="form">
-		<legend>Form title</legend>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-sm-offset-2 col-md-offset-3 col-md-offset-4">	
+			<div class="form_container">
+				<form action="/auth/signup" method="POST" role="form">
+					<legend>Please enter the required fields</legend>
 
-		<label for="">label</label>
-		<input type="text" name="email" placeholder="Email">
-		<input type="password" name="password" placeholder="Password">
-		<button type="submit">Submit</button>
-	</form>
+					<input class="signup-field" type="text" name="email" placeholder="Email">
+					<input class="signup-field" type="password" name="password" placeholder="Password">
+					<input class="signup-field" name="address" type="text" placeholder="Address, City, State ZIP">
+					<input class="signup-field" name="destination" type="text" value="Seattle, WA" readonly>
+
+					<button class="btn btn-primary" type="submit">Sign Up</button>
+				</form>
+			</div>	
+		</div>
+	</div>
 </div>

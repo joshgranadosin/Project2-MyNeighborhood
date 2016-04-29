@@ -74,8 +74,7 @@ userSchema.pre('save', function(next){
 	var self = this;
 
 	var geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-	var bigAddr = self.address.street.replace(/ /g,'+') + '+' + self.address.city + '+' + self.address.state + '+' 
-		+ self.address.zip;
+	var bigAddr = self.address.replace(/ /g,'+');
 	console.log("Geocoding " + bigAddr);
 	request(geocodeURL + bigAddr + "&key=" + process.env.GOOGLE_PLACES_API_KEY, function(err, res, body){
 		if(!err && res.statusCode === 200){
@@ -85,7 +84,7 @@ userSchema.pre('save', function(next){
 
 			var hitsObj = {};
 
-			async.eachSeries(allTypes, function(type, hCallback){
+			async.each(allTypes, function(type, hCallback){
 				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT
 				+ "?location=" + self.lati + "," + self.long + "&radius=" + RADIUS
 				+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
@@ -108,6 +107,7 @@ userSchema.pre('save', function(next){
 					}
 				});
 			}, function(err){
+				console.log("After async function")
 				if(err){
 					console.log(err);
 					return next(err);
@@ -120,6 +120,7 @@ userSchema.pre('save', function(next){
 						}
 			            self.password = hash;
 			            self.email = self.email.toLowerCase();
+			            console.log("succeeded hash");
 			            next();
 					});
 				}

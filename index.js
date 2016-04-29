@@ -114,7 +114,7 @@ app.post('/results', function(req, res){
 			var lati = data.results[0].geometry.location.lat;
 			var long = data.results[0].geometry.location.lng;
 
-			async.eachSeries(allTypes, function(type, hCallback){
+			async.each(allTypes, function(type, hCallback){
 				var requestURL = GOOGLEPLACESAPI + GOOGLEPLACESOUTPUT + "?location=" + lati + "," + long + "&radius=" + RADIUS
 				+ "&type=" + type + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
 
@@ -146,7 +146,7 @@ app.post('/results', function(req, res){
 					City.findOne({/*'cityinfo.city': destinationCity, 'cityinfo.state': 'Washington'*/}, function(err, city){
 						console.log(city);
 
-						async.eachSeries(city.list, function(neighborhoodListed, nCallback){
+						async.each(city.list, function(neighborhoodListed, nCallback){
 							Neighborhood.findOne({zillowRegionID: neighborhoodListed.id}).then(function(neighborhood){
 								var score = 0;
 								var tally = 0;

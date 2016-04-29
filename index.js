@@ -39,6 +39,8 @@ app.use(function(req, res, next){
 		});
 	}
 	else {
+		req.currentUser = false;
+		res.locals.currentUser = false;
 		console.log("middleware else case");
 		next();
 	}
@@ -206,6 +208,10 @@ app.post('/results', function(req, res){
 			res.send(error);
 		}
 	});
+});
+
+app.get('/error', function(req, res) {
+	res.render('error');
 });
 
 app.listen(process.env.PORT || 3000);

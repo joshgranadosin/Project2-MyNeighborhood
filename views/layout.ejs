@@ -8,7 +8,32 @@
   </head>
   <body>
 
+<div class="modal fade" id="modal-id">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/auth/signin" method="POST" role="form">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Sign In</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Please enter your email and password.</label>
+            <input type="text" class="form-control" name="email" placeholder="User Email">
+            <input type="password" class="form-control" name="password" placeholder="Password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Sign In</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
   	<%- body %>
+
 	<div class="footer">
 		<a href=""> Technologies Used </a> |
 		<a href=""> Approach Taken </a> |
@@ -16,6 +41,8 @@
 		<a href=""> Unsolved Problems </a> |
 		<a href=""> Wireframes </a>
 	</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   </body>
 </html>
 
